@@ -1,5 +1,6 @@
-import numpy as np
 import tkinter as tk
+
+import numpy as np
 from PIL import Image, ImageDraw, ImageTk
 
 from artificial_neural_network.neural_net import Network
@@ -9,6 +10,7 @@ class FormattedButton(tk.Button):
     """
     A button without the default bevelled edge
     """
+
     def __init__(self, *args, **kwargs):
         tk.Button.__init__(self, *args, **kwargs)
         self.config(relief='flat', activebackground=None, overrelief='flat', borderwidth=0)
@@ -16,6 +18,7 @@ class FormattedButton(tk.Button):
 
 class UserCanvas(tk.Frame):
     """Allows the user to draw a number which can then be saved to file"""
+
     def __init__(self, master):
         super(UserCanvas, self).__init__(master, width=280, height=280, highlightthickness=0)
         self.configure(background=self.winfo_toplevel()['background'],
@@ -69,6 +72,7 @@ class NetworkGui(tk.Canvas):
     """Visualise the network by shading the nodes different colours depending on activation
     zoom and scroll by pressing the + and - keys respectively
     pan by dragging on the screen"""
+
     def __init__(self, master, network: Network, visible_nodes_per_layer=None):
         super(NetworkGui, self).__init__(master, width=600, height=600)
         self.winfo_toplevel().title('Neural Network')
@@ -125,7 +129,7 @@ class NetworkGui(tk.Canvas):
                                                                            self.visible_nodes_per_layer):
             number_of_layers = total_nodes // visible_nodes
             if number_of_layers > 1:
-                self.itemconfig(label, text=f'{current_visible_node+1}/' + f'{total_nodes // visible_nodes}')
+                self.itemconfig(label, text=f'{current_visible_node + 1}/' + f'{total_nodes // visible_nodes}')
 
     def get_node_y_coordinates(self, layer):
         visible_coordinates = np.linspace(70, self.winfo_reqheight() - 30,
@@ -163,7 +167,7 @@ class NetworkGui(tk.Canvas):
                         self.create_line(x, y, x + x_interval, linked_y, capstyle=tk.ROUND,
                                          fill='#' + 3 * '{0:02x}'.format(int(weight)),
                                          state=node_state, tags=(f'layer{layer}node_row{node_row}',
-                                                                 f'layer{layer+1}node_row{next_node_row}'))
+                                                                 f'layer{layer + 1}node_row{next_node_row}'))
                     if print_neurons:
                         with np.printoptions(precision=2, suppress=True, threshold=5):
                             print(f"({node}, {layer}), Neuron, weight = {str(self.network.weights[layer][node])}, "
@@ -192,6 +196,7 @@ class NetworkGui(tk.Canvas):
 
 class ImageViewer(tk.Frame):
     """Browse through other images and see what the network predicted from them"""
+
     def __init__(self, master, filename, network_gui=None):
         super(ImageViewer, self).__init__(master, highlightthickness=0)
         self.configure(background=self.winfo_toplevel()['background'])
@@ -237,6 +242,7 @@ class ImageViewer(tk.Frame):
 class CustomTrainGUI(tk.Frame):
     """Complete UI that allows the user to inspect ntwork, browse gallery and draw their own images
         Run ui.mainloop() to run after setting up"""
+
     def __init__(self, master, network, gallery_file, *args, instant_test=True, **kwargs):
         """
         :param master: The tkinter root, can jsut be Tk.tk() to create a new window
@@ -283,17 +289,17 @@ class CustomTrainGUI(tk.Frame):
         network_input = np.asarray(user_image).flatten() / 255 * 0.99 + 0.001
         self.network_gui.display_activations(network_input)
 
+
 def test_draw_basic_network():
-    basic_network = Network([4,2,5])
+    basic_network = Network([4, 2, 5])
     root = tk.Tk()
     gui = NetworkGui(root, basic_network)
     gui.grid(row=0, column=0, rowspan=5, sticky='nsew')
     root.mainloop()
+
 
 if __name__ == '__main__':
     numbers_network = Network([784, 75, 10], load_folder='train')
     ui = CustomTrainGUI(tk.Tk(), numbers_network, visible_nodes_per_layer=[28, 25, 10],
                         gallery_file='data_sets/mnist_test.csv', instant_test=False)
     ui.mainloop()
-
-

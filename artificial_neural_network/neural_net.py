@@ -72,7 +72,7 @@ class Network:
         for layer in range(len(self.nodes_per_layer) - 2, 0, -1):  # update weight layers 0 to L-1
             layer_input = query_data[layer]  # layer l-1's activations
             layer_output = query_data[layer + 1]  # sigmoid(z) # l's activations
-            derivative_activation_func = layer_output * (1 - layer_output) # sigmoid prime
+            derivative_activation_func = layer_output * (1 - layer_output)  # sigmoid prime
 
             delta = derivative_loss_func * derivative_activation_func
             self.weights[layer] += self.learning_rate * np.outer(layer_input, delta)
