@@ -257,6 +257,7 @@ class CustomTrainGUI(tk.Frame):
         self.image_viewer = ImageViewer(self, filename=gallery_file, network_gui=self.network_gui)
         self.instant_test = instant_test
         test_button = FormattedButton(self, text='Test', command=self.test, height=0, pady=5)
+        self.winfo_toplevel().title('Neural Network Visualiser')
 
         if self.instant_test:
             self.user_canvas.canvas.bind('<B1-Motion>', lambda event: (self.user_canvas.draw(event), self.test()))
@@ -291,7 +292,8 @@ def test_draw_basic_network():
 
 if __name__ == '__main__':
     numbers_network = Network([784, 75, 10], load_folder='train')
-    ui = CustomTrainGUI(tk.Tk(), numbers_network, visible_nodes_per_layer=[28, 25, 10], gallery_file='data_sets/mnist_test.csv')
+    ui = CustomTrainGUI(tk.Tk(), numbers_network, visible_nodes_per_layer=[28, 25, 10],
+                        gallery_file='data_sets/mnist_test.csv', instant_test=False)
     ui.mainloop()
 
 
